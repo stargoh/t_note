@@ -1,8 +1,11 @@
 class User {
-  String email, password, user_firstname, user_lastname;
-  User(
-      {required this.email,
-      required this.password,
-      required this.user_firstname,
-      required this.user_lastname});
+  String? email, password, user_firstname, user_lastname, phoneNumber, role;
+  User({
+    this.email,
+    this.password,
+    this.user_firstname,
+    this.user_lastname,
+    this.phoneNumber,
+    this.role,
+  });
 }

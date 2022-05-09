@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:t_note/bottomnavibaradmin.dart';
 import 'package:t_note/mainscreen.dart';
 import 'package:t_note/registrationscreen.dart';
 import 'package:t_note/mainscreen.dart';
@@ -6,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import 'bottomnavigationbar.dart';
 import 'user.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _passwordController = new TextEditingController();
   late SharedPreferences prefs;
 
+  get role => null;
+
   @override
   void initState() {
     loadPref();
@@ -29,25 +33,25 @@ class _LoginScreenState extends State<LoginScreen> {
     return MaterialApp(
         title: 'Material App',
         home: Scaffold(
-          backgroundColor: Color.fromARGB(225, 172, 223, 220),
+          backgroundColor: const Color.fromARGB(225, 172, 223, 220),
           body: Center(
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   Container(
-                      margin: EdgeInsets.fromLTRB(70, 50, 70, 10),
+                      margin: const EdgeInsets.fromLTRB(70, 50, 70, 10),
                       child:
                           Image.asset('assets/images/logoround.png', scale: 2)),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   Card(
-                    margin: EdgeInsets.all(20),
+                    margin: const EdgeInsets.all(20),
                     elevation: 10,
-                    color: Color.fromARGB(235, 180, 225, 225),
+                    color: const Color.fromARGB(235, 180, 225, 225),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       child: Column(
                         children: [
-                          Text('Login',
+                          const Text('Login',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -56,17 +60,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextField(
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 labelText: 'Email',
                                 icon: Icon(Icons.email),
                               )),
                           TextField(
                             controller: _passwordController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                                 labelText: 'Password', icon: Icon(Icons.lock)),
                             obscureText: true,
                           ),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Row(
                             children: [
                               Checkbox(
@@ -74,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onChanged: (bool? value) {
                                     _onChange(value!);
                                   }),
-                              Text("Remember Me")
+                              const Text("Remember Me")
                             ],
                           ),
                           MaterialButton(
@@ -82,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             minWidth: 200,
-                            child: Text('Login'),
+                            child: const Text('Login'),
                             color: Colors.blueGrey[400],
                             onPressed: _login,
                           ),
@@ -91,14 +95,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   GestureDetector(
-                    child: Text("Register New Account",
-                        style: TextStyle(fontSize: 16)),
+                    child: const Text("Register New Account",
+                        style: const TextStyle(fontSize: 16)),
                     onTap: _registerNewUser,
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   GestureDetector(
-                    child: Text("Forgot Password?",
-                        style: TextStyle(fontSize: 16)),
+                    child: const Text("Forgot Password?",
+                        style: const TextStyle(fontSize: 16)),
                     onTap: _forgotPassword,
                   ),
                 ],
@@ -153,9 +157,23 @@ class _LoginScreenState extends State<LoginScreen> {
             email: user_email,
             password: _password,
             user_firstname: userdata[1],
-            user_lastname: userdata[2]);
-        Navigator.push(context,
-            MaterialPageRoute(builder: (content) => MainScreen(user: user)));
+            user_lastname: userdata[2],
+            phoneNumber: userdata[4],
+            role: userdata[5]);
+
+        if (userdata[5] == ("ADMIN")) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (content) =>
+                      BottomNavigationWidgetadmin(user: user)));
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (content) =>
+                      BottomNavigationWidgetuser(user: user)));
+        }
       }
     });
   }
@@ -171,26 +189,26 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: Text("Forgot Your Password?"),
+              title: const Text("Forgot Your Password?"),
               content: new Container(
                   height: 90,
                   child: Column(children: [
-                    Text("Enter your email"),
+                    const Text("Enter your email"),
                     TextField(
                         keyboardType: TextInputType.emailAddress,
                         controller: _useremailController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             labelText: 'Email', icon: Icon(Icons.email))),
                   ])),
               actions: [
                 TextButton(
-                  child: Text("Submit"),
+                  child: const Text("Submit"),
                   onPressed: () {
                     _resetPassword(_useremailController.text);
                   },
                 ),
                 TextButton(
-                    child: Text("Cancel"),
+                    child: const Text("Cancel"),
                     onPressed: () {
                       Navigator.of(context).pop();
                     })

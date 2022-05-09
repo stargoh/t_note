@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:t_note/loginscreen.dart';
 import 'user.dart';
-import 'package:t_note/drawer.dart';
+//import 'package:t_note/drawer.dart';
 
 //void main() => runApp(MyApp());
 
@@ -26,33 +26,10 @@ class _MainScreenState extends State<MainScreen> {
       body: Center(
         child: Container(
           child: Text('Welcome!' +
-              widget.user.email +
-              widget.user.user_firstname +
-              widget.user.user_lastname),
+              widget.user.email! +
+              widget.user.user_firstname! +
+              widget.user.user_lastname!),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        backgroundColor: Color.fromARGB(225, 172, 223, 220),
-        selectedItemColor: Colors.white70,
-        onTap: (index) => setState(() => _currentIndex = index),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Feed',
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Feed',
-            backgroundColor: Colors.blue,
-          )
-        ],
       ),
     );
   }
