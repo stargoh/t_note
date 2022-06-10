@@ -162,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
             role: userdata[5]);
 
         if (userdata[5] == ("ADMIN")) {
-          Navigator.push(
+          Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (content) =>
@@ -288,6 +288,30 @@ class _LoginScreenState extends State<LoginScreen> {
       if (respone.body == "success") {
         Fluttertoast.showToast(
           msg: "Reset Done! Please check your email !",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          fontSize: 16.0,
+        );
+        Navigator.push(
+            context, MaterialPageRoute(builder: (content) => LoginScreen()));
+      } else if (respone.body == "reset failed") {
+        Fluttertoast.showToast(
+          msg: "Reset Failed !",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          fontSize: 16.0,
+        );
+        Navigator.push(
+            context, MaterialPageRoute(builder: (content) => LoginScreen()));
+      } else if (respone.body == "no user") {
+        Fluttertoast.showToast(
+          msg: "This user not found",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,

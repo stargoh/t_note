@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:t_note/loginscreen.dart';
 import 'package:t_note/profilescreen.dart';
 import 'user.dart';
+import 'package:http/http.dart' as http;
 
 class EditProfileScreen extends StatefulWidget {
   final User user;
@@ -19,9 +20,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController _firstNameController = new TextEditingController();
   TextEditingController _lastNameController = new TextEditingController();
   TextEditingController _phoneNoController = new TextEditingController();
+  TextEditingController _emailController = new TextEditingController();
   late double screenHeight, screenWidth;
   String pathAsset = 'assets/images/profile.png';
   late File _image;
+
+  @override
+  void initState() {
+    _emailController.text = widget.user.email!;
+    _firstNameController.text = widget.user.user_firstname!;
+    _lastNameController.text = widget.user.user_lastname!;
+    _phoneNoController.text = widget.user.phoneNumber!;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,37 +106,40 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   height: screenHeight / 3,
                   width: screenWidth / 1,
                   child: Column(children: [
+                    IgnorePointer(
+                      child: TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.name,
+                        decoration: const InputDecoration(
+                          hintText: "Email",
+                          labelText: 'Email',
+                        ),
+                      ),
+                    ),
                     TextField(
                       controller: _firstNameController,
                       keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
-                        hintText: widget.user.user_firstname,
+                      decoration: const InputDecoration(
+                        hintText: "First Name",
                         labelText: 'First Name',
                       ),
                     ),
                     TextField(
                       controller: _lastNameController,
                       keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
-                        hintText: widget.user.user_lastname,
+                      decoration: const InputDecoration(
+                        hintText: "Last Name",
                         labelText: 'Last Name',
                       ),
                     ),
                     TextField(
                       controller: _phoneNoController,
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintText: widget.user.phoneNumber,
+                      decoration: const InputDecoration(
+                        hintText: "Phone Number",
                         labelText: 'Phone Number',
                       ),
                     ),
-                    // TextField(
-                    //   controller: _phoneNoController,
-                    //   keyboardType: TextInputType.number,
-                    //   decoration: InputDecoration(
-                    //     hintText: widget.user.phoneNumber,
-                    //     labelText: 'Phone Number',
-                    //   ),
                   ]),
                 ),
                 Container(
@@ -134,7 +148,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      minWidth: 370,
+                      minWidth: 350,
                       height: 40,
                       child: Text(
                         'Update Profile',
@@ -159,6 +173,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       String _firstname = _firstNameController.text.toString();
       String _lastname = _lastNameController.text.toString();
       String _phoneNo = _phoneNoController.text.toString();
+      String _email = _emailController.text.toString();
 
       if (_firstname.isEmpty && _lastname.isEmpty) {
         Fluttertoast.showToast(
@@ -178,12 +193,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         if ((_lastNameController.text.toString() == "")) {
           _lastname = widget.user.user_lastname!;
         } else {
-          _phoneNo = _phoneNoController.text.toString();
+          _lastname = _lastNameController.text.toString();
         }
-        if ((_lastNameController.text.toString() == "")) {
+        if ((_phoneNoController.text.toString() == "")) {
           _phoneNo = widget.user.phoneNumber!;
         } else {
           _phoneNo = _phoneNoController.text.toString();
+        }
+
+        if ((_emailController.text.toString() == "")) {
+          _email = widget.user.email!;
+        } else {
+          _email = _emailController.text.toString();
         }
 
         showDialog(
@@ -201,7 +222,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: (Text('Yes',
                         style: Theme.of(context).textTheme.bodyText2)),
                     onPressed: () {
-                      _updateProfile(_firstname, _lastname, widget.user.email!);
+                      _updateProfile(_firstname, _lastname, _phoneNo, _email);
                       Navigator.of(context).pop();
                     },
                   ),
@@ -315,54 +336,52 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   //   }
   // }
 
-  void _updateProfile(String firstname, String lastname, String email) {
+  void _updateProfile(
+      String firstname, String lastname, String phoneNo, String email) {
     //String base64Image = base64Encode(_image.readAsBytesSync());
-    print(email);
     print(firstname);
     print(lastname);
+    print(phoneNo);
+    print(email);
     //print(phoneno);
     //print(base64Image);
 
-    // setState(() {
-    //   http.post(
-    //   Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_profile.php"),
-    //   body: {
-    //     "email":email,
-    //     "firstname":firstname,
-    //     "lastname":lastname,
-    //     "phoneno":phoneno,
-    //     "encoded_string": base64Image
-    //   }).then(
-    //     (response){
-    //       print(response.body);
+    setState(() {
+      http.post(
+          Uri.parse(
+              "https://hubbuddies.com/269842/tnotes/php/updateProfile.php"),
+          body: {
+            "email": email,
+            "firstName": firstname,
+            "lastName": lastname,
+            "phoneNo": phoneNo
+          }).then((response) {
+        print(response.body);
 
-    //       if(response.body=="success"){
-    //         Fluttertoast.showToast(
-    //         msg: "Update Success.",
-    //         toastLength: Toast.LENGTH_SHORT,
-    //         gravity: ToastGravity.BOTTOM,
-    //         timeInSecForIosWeb: 1,
-    //         backgroundColor: Colors.red[200],
-    //         textColor: Colors.white,
-    //         fontSize: 16.0);
-    //       }else{
-    //         Fluttertoast.showToast(
-    //         msg: "Update Failed",
-    //         toastLength: Toast.LENGTH_SHORT,
-    //         gravity: ToastGravity.BOTTOM,
-    //         timeInSecForIosWeb: 1,
-    //         backgroundColor: Colors.red[200],
-    //         textColor: Colors.white,
-    //         fontSize: 16.0);
-    //       }
+        if (response.body == "Success") {
+          Fluttertoast.showToast(
+              msg: "Update Success.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red[200],
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else {
+          Fluttertoast.showToast(
+              msg: "Update Failed",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red[200],
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
 
-    //     widget.user.firstName=firstname;
-    //     widget.user.lastName=lastname;
-    //     widget.user.phoneNo=phoneno;
-
-    //   }
-    // );
-    // })
-    ;
+        // widget.user.firstName=firstname;
+        // widget.user.lastName=lastname;
+        // widget.user.phoneNo=phoneno;
+      });
+    });
   }
 }

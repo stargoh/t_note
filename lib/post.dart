@@ -1,0 +1,14 @@
+class Post {
+  final pid, pimage, email, title, desc, categ, rating, likes, likeaction;
+
+  Post(
+      {required this.pid,
+      required this.pimage,
+      required this.email,
+      required this.title,
+      required this.desc,
+      required this.categ,
+      required this.rating,
+      required this.likes,
+      required this.likeaction});
+}

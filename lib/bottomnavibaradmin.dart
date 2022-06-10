@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:t_note/loginscreen.dart';
 import 'package:t_note/newpost.dart';
 import 'package:t_note/profilescreen.dart';
+import 'package:t_note/report.dart';
 import 'mainscreen.dart';
 import 'package:t_note/category.dart';
 import 'user.dart';
@@ -26,7 +27,7 @@ class BottomNavigationWidgetState extends State<BottomNavigationWidgetadmin> {
       MainScreen(
         user: widget.user,
       ),
-      NewPost(
+      report(
         user: widget.user,
       ),
       category(

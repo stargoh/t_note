@@ -6,27 +6,25 @@ import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:ndialog/ndialog.dart';
-import 'package:t_note/loginscreen.dart';
+import 'package:t_note/post.dart';
+import 'package:t_note/profilescreen.dart';
 import 'package:t_note/user.dart';
 
-class NewPost extends StatefulWidget {
+class EditPost extends StatefulWidget {
   final User user;
+  final Post post;
 
-  const NewPost({Key? key, required this.user}) : super(key: key);
+  const EditPost({Key? key, required this.user, required this.post})
+      : super(key: key);
 
   @override
-  State<NewPost> createState() => _NewPostState();
+  State<EditPost> createState() => _EditPostState();
 }
 
-class _NewPostState extends State<NewPost> {
+class _EditPostState extends State<EditPost> {
   // late ProgressDialog pd;
-  late List _categoryList = [];
-  late List _processedcategoryList = ["Select Category"];
   File? _image;
   String pathAsset = 'assets/images/uploadLogo.png';
-  String selectCategory = "Select Category";
-  String seletedvalue = "";
-
   final TextEditingController _title = TextEditingController();
   final TextEditingController _desc = TextEditingController();
   final TextEditingController _categ = TextEditingController();
@@ -35,8 +33,11 @@ class _NewPostState extends State<NewPost> {
 
   @override
   void initState() {
+    _title.text = widget.post.title;
+    _desc.text = widget.post.desc;
+    _categ.text = widget.post.categ;
+    _rating.text = widget.post.rating;
     super.initState();
-    _loadCategory();
   }
 
   @override
@@ -46,7 +47,7 @@ class _NewPostState extends State<NewPost> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(225, 172, 223, 220),
-        title: const Text('Create Post'),
+        title: const Text('View Post'),
       ),
       body: Padding(
           padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
@@ -54,29 +55,17 @@ class _NewPostState extends State<NewPost> {
               child: Column(
             children: [
               const SizedBox(height: 15),
-              GestureDetector(
-                onTap: () => {_onPictureSelectionDialog()},
-                child: Container(
-                    height: 200,
-                    width: 200,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                          // ignore: unrelated_type_equality_checks
-                          image: _image == null
-                              ? AssetImage(pathAsset) as ImageProvider
-                              : FileImage(_image!),
-                          fit: BoxFit.scaleDown,
-                        ),
-                        border: Border.all(
-                          width: 3.0,
-                          color: Colors.grey,
-                        ),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)))),
+              SizedBox(
+                width: screenWidth,
+                height: 1 / 3 * screenHeight,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Hero(
+                    tag: '',
+                    child: widget.post.pimage,
+                  ),
+                ),
               ),
-              const SizedBox(height: 10),
-              const Text("Click image to take/upload your product picture.",
-                  style: TextStyle(fontSize: 12.0, color: Colors.black)),
               const SizedBox(height: 25),
               Card(
                 color: Colors.grey[250],
@@ -89,40 +78,24 @@ class _NewPostState extends State<NewPost> {
                       TextFormField(
                         controller: _title,
                         keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                          labelText: 'Add a title',
+                        decoration: InputDecoration(
+                          labelText: "Title",
                         ),
                       ),
-                      const SizedBox(height: 14),
-                      const Text("Select Category:",
-                          style:
-                              TextStyle(fontSize: 14.0, color: Colors.black)),
-                      DropdownButton(
-                          value: selectCategory,
-                          style: TextStyle(fontSize: 15, color: Colors.red),
-                          items: [
-                            for (String data in _processedcategoryList)
-                              DropdownMenuItem(
-                                child: Text(
-                                  data,
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                                value: data,
-                              ),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              selectCategory = value.toString();
-                            });
-                            chooseOrderStatus(value);
-                          }),
                       TextFormField(
                         controller: _desc,
-                        minLines: 1,
+                        minLines: 7,
                         maxLines: 20,
                         keyboardType: TextInputType.multiline,
-                        decoration: const InputDecoration(
-                          labelText: "Desciption",
+                        decoration: InputDecoration(
+                          labelText: "Description",
+                        ),
+                      ),
+                      TextFormField(
+                        controller: _categ,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          labelText: "Category",
                         ),
                       ),
                       TextFormField(
@@ -133,8 +106,8 @@ class _NewPostState extends State<NewPost> {
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly
                         ],
-                        decoration: const InputDecoration(
-                          labelText: 'Rating',
+                        decoration: InputDecoration(
+                          labelText: "Rating",
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -142,26 +115,41 @@ class _NewPostState extends State<NewPost> {
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   MaterialButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    minWidth: 200,
-                    height: 50,
-                    child: const Text("Publish",
+                    minWidth: 150,
+                    height: 35,
+                    child: Text("Save",
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                        )),
-                    onPressed: _submitProductDialog,
-                    color: const Color.fromARGB(225, 172, 223, 220),
+                            color: Colors.white,
+                            fontSize: 20,
+                            letterSpacing: screenWidth / 178.19,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: _updatepost,
+                    color: Color.fromARGB(225, 172, 223, 220),
+                  ),
+                  MaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    minWidth: 150,
+                    height: 35,
+                    child: Text("Delete",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            letterSpacing: screenWidth / 178.19,
+                            fontWeight: FontWeight.bold)),
+                    onPressed: _deletepost,
+                    color: Colors.red,
                   ),
                 ],
-              ),
+              )
             ],
           ))),
     );
@@ -264,68 +252,27 @@ class _NewPostState extends State<NewPost> {
     }
   }
 
-  void _submitProductDialog() {
-    String title = _title.text.toString();
-    String desc = _desc.text.toString();
-    String categ = _categ.text.toString();
-    String rating = _rating.text.toString();
-    if (_image == null ||
-        title == "" ||
-        desc == "" ||
-        //categ == "" ||
-        rating == "") {
-      Fluttertoast.showToast(
-        msg: "Image OR Textfield is empty!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-      );
-      return;
-    }
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            title: const Text("Create post?"),
-            content: const Text("Are your sure?"),
-            actions: [
-              TextButton(
-                child: const Text("Ok"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _uploadPost();
-                },
-              ),
-              TextButton(
-                  child: const Text("Cancel"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-            ],
-          );
-        });
-  }
-
-  Future<void> _uploadPost() async {
+  void _updatepost() {
     ProgressDialog progressDialog = ProgressDialog(context,
         message: const Text("Upload"), title: const Text("Posting..."));
     progressDialog.show();
-    String base64Image = base64Encode(_image!.readAsBytesSync());
     String title = _title.text.toString();
     String desc = _desc.text.toString();
     String category = _categ.text.toString();
     String rating = _rating.text.toString();
-
-    http.post(Uri.parse("https://hubbuddies.com/269842/tnotes/php/newpost.php"),
+    Fluttertoast.showToast(
+      msg: "Success",
+      toastLength: Toast.LENGTH_SHORT,
+    );
+    http.post(
+        Uri.parse("https://hubbuddies.com/269842/tnotes/php/updatepost.php"),
         body: {
           "email": widget.user.email,
+          "pid": widget.post.pid,
           "title": title,
           "desc": desc,
-          "categ": selectCategory,
+          "categ": category,
           "rating": rating,
-          "encoded_string": base64Image
         }).then((response) {
       progressDialog.dismiss();
       if (response.body == "Success") {
@@ -346,30 +293,42 @@ class _NewPostState extends State<NewPost> {
     });
   }
 
-  void _loadCategory() {
-    String name;
+  void _deletepost() {
+    ProgressDialog progressDialog = ProgressDialog(context,
+        message: const Text("Delete"), title: const Text("Posting..."));
+    progressDialog.show();
+    Fluttertoast.showToast(
+      msg: "Success",
+      toastLength: Toast.LENGTH_SHORT,
+    );
     http.post(
-        Uri.parse("https://hubbuddies.com/269842/tnotes/php/loadcategory.php"),
-        body: {}).then((response) {
-      print(response.body);
-      if (response.body == "nodata") {
-        setState(() {});
-        return;
+        Uri.parse("https://hubbuddies.com/269842/tnotes/php/deletepost.php"),
+        body: {
+          "email": widget.user.email,
+          "pid": widget.post.pid,
+        }).then((response) {
+      progressDialog.dismiss();
+      if (response.body == "Success") {
+        Fluttertoast.showToast(
+          msg: "Success",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+        );
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfileScreen(
+                      user: widget.user,
+                    )));
       } else {
-        var jsondata = json.decode(response.body);
-        _categoryList = jsondata["category"];
-        for (int i = 0; i < _categoryList.length; i++) {
-          _processedcategoryList.add(_categoryList[i]["category_name"]);
-        }
-        print(_processedcategoryList);
-        setState(() {});
+        Fluttertoast.showToast(
+          msg: "Failed",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+        );
       }
     });
-  }
-
-  void chooseOrderStatus(value) {
-    selectCategory = value;
-    print(selectCategory);
-    setState(() {});
   }
 }

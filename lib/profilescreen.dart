@@ -4,6 +4,7 @@ import 'package:t_note/editprofilescreen.dart';
 import 'package:t_note/loginscreen.dart';
 
 import 'package:t_note/mainscreen.dart';
+import 'package:t_note/mypost.dart';
 import 'package:t_note/registrationscreen.dart';
 import 'package:t_note/mainscreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -58,43 +59,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Container(
                           child: Stack(children: [
                             Container(
-                              padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                              height: screenHeight / 5,
-                              width: screenWidth / 4,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
+                                // padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                                // height: screenHeight / 5,
+                                // width: screenWidth / 4,
+                                // decoration: BoxDecoration(
+                                //   shape: BoxShape.circle,
                                 // //border: Border.all(color:Theme.of(context).appBarTheme.actionsIconTheme.color),
                                 // //image: DecorationImage(
                                 //   //image: _image == null ? AssetImage(pathAsset) : FileImage(_image),
                                 //   fit: BoxFit.scaleDown,
                                 // )
-                              ),
-                            ),
+                                //  ),
+                                ),
                             Align(
                               alignment: Alignment.bottomRight,
-                              child: Container(
-                                  height: 25,
-                                  width: 25,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red[200],
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: IconButton(
-                                    padding: EdgeInsets.all(0),
-                                    icon: Icon(
-                                      Icons.edit_outlined,
-                                      //color: Theme.of(context).appBarTheme.actionsIconTheme.color,
-                                      size: 20,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EditProfileScreen(
-                                                      user: widget.user)));
-                                    },
-                                  )),
+                              // child: Container(
+                              //     height: 25,
+                              //     width: 25,
+                              //     decoration: BoxDecoration(
+                              //       color: Colors.red[200],
+                              //       shape: BoxShape.circle,
+                              //     ),
+                              //     child: IconButton(
+                              //       padding: EdgeInsets.all(0),
+                              //       icon: Icon(
+                              //         Icons.edit_outlined,
+                              //         //color: Theme.of(context).appBarTheme.actionsIconTheme.color,
+                              //         size: 20,
+                              //       ),
+                              //       onPressed: () {
+                              //         Navigator.pushReplacement(
+                              //             context,
+                              //             MaterialPageRoute(
+                              //                 builder: (context) =>
+                              //                     EditProfileScreen(
+                              //                         user: widget.user)));
+                              //       },
+                              //     )),
                             )
                           ]),
                         )),
@@ -152,6 +153,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   //     );
                   //   },
                   // ),
+                  ProfileMenu(
+                    icon: Icon(Icons.post_add_rounded),
+                    text: "My Post",
+                    press: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyPost(user: widget.user)));
+                    },
+                  ),
                   ProfileMenu(
                     icon: Icon(Icons.edit_outlined),
                     text: "Edit Profile",
