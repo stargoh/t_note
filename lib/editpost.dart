@@ -264,6 +264,7 @@ class _EditPostState extends State<EditPost> {
       msg: "Success",
       toastLength: Toast.LENGTH_SHORT,
     );
+    Navigator.of(context).pop();
     http.post(
         Uri.parse("https://hubbuddies.com/269842/tnotes/php/updatepost.php"),
         body: {
@@ -315,12 +316,13 @@ class _EditPostState extends State<EditPost> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
         );
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ProfileScreen(
-                      user: widget.user,
-                    )));
+        Navigator.of(context).pop();
+        // Navigator.pushReplacement(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => ProfileScreen(
+        //               user: widget.user,
+        //             )));
       } else {
         Fluttertoast.showToast(
           msg: "Failed",

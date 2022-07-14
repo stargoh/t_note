@@ -42,17 +42,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromARGB(225, 172, 223, 220),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ProfileScreen(
-                            user: widget.user,
-                          )));
-            },
-          ),
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back),
+          //   onPressed: () {
+          //     Navigator.pushReplacement(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (context) => ProfileScreen(
+          //                   user: widget.user,
+          //                 )));
+          //   },
+          // ),
           title: Text('Edit Profile', style: TextStyle(fontFamily: 'Arial')),
         ),
         body: SingleChildScrollView(
@@ -64,43 +64,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     height: screenHeight / 6.5,
                     width: screenWidth / 4,
                     child: Container(
-                      child: Stack(children: [
-                        Container(
-                          padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                          height: screenHeight / 5,
-                          width: screenWidth / 4,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            // border: Border.all(color:Theme.of(context).appBarTheme.actionsIconTheme.color),
-                            // image: DecorationImage(
-                            // image: _image == null ? AssetImage(pathAsset) : FileImage(_image),
-                            // fit: BoxFit.scaleDown,
-                            //)
-                          ),
+                        child: Stack(children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+                        height: screenHeight / 5,
+                        width: screenWidth / 4,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          // border: Border.all(color:Theme.of(context).appBarTheme.actionsIconTheme.color),
+                          // image: DecorationImage(
+                          // image: _image == null ? AssetImage(pathAsset) : FileImage(_image),
+                          // fit: BoxFit.scaleDown,
+                          //)
                         ),
-                        Align(
+                      ),
+                      Align(
                           alignment: Alignment.bottomRight,
                           child: Container(
-                              height: 25,
-                              width: 25,
-                              decoration: BoxDecoration(
-                                color: Colors.red[200],
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                padding: EdgeInsets.all(0),
-                                icon: Icon(
-                                  Icons.camera_alt_outlined,
-                                  //color: Theme.of(context).appBarTheme.actionsIconTheme.color,
-                                  size: 18,
-                                ),
-                                onPressed: () {
-                                  //_onPictureSelectionDialog();
-                                },
+                              // height: 25,
+                              // width: 25,
+                              // decoration: BoxDecoration(
+                              //   color: Colors.red[200],
+                              //   shape: BoxShape.circle,
+                              // ),
+                              // child: IconButton(
+                              //   padding: EdgeInsets.all(0),
+                              //   icon: Icon(
+                              //     Icons.camera_alt_outlined,
+                              //     //color: Theme.of(context).appBarTheme.actionsIconTheme.color,
+                              //     size: 18,
+                              // ),
+                              //onPressed: () {
+                              //_onPictureSelectionDialog();
+                              //},
                               )),
-                        )
-                      ]),
-                    )),
+                    ]) // May remove this is needed.
+                        //]),
+                        )),
                 SizedBox(height: 50),
                 Container(
                   height: screenHeight / 3,

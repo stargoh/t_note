@@ -37,17 +37,17 @@ class _MyPostState extends State<MyPost> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(225, 172, 223, 220),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProfileScreen(
-                          user: widget.user,
-                        )));
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     Navigator.pushReplacement(
+        //         context,
+        //         MaterialPageRoute(
+        //             builder: (context) => ProfileScreen(
+        //                   user: widget.user,
+        //                 )));
+        //   },
+        // ),
         title: Text('My Post', style: TextStyle(fontFamily: 'Arial')),
       ),
       body: Center(
@@ -150,7 +150,7 @@ class _MyPostState extends State<MyPost> {
 
   void _loadPosts() {
     http.post(
-        Uri.parse("https://hubbuddies.com/269842/tnotes/php/loadposts.php"),
+        Uri.parse("https://hubbuddies.com/269842/tnotes/php/loadmypost.php"),
         body: {
           "user_email": widget.user.email,
         }).then((response) {

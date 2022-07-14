@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:badges/badges.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:t_note/post.dart';
 import 'package:t_note/report.dart';
 import 'package:t_note/report_post_details.dart';
@@ -126,7 +127,11 @@ class _ReportState extends State<ReportView> {
                                           padding: const EdgeInsets.fromLTRB(
                                               0, 5, 5, 0),
                                           child: GestureDetector(
-                                            onTap: () {},
+                                            onTap: () {
+                                              deletepostDialog(
+                                                _postList[index]['pid'],
+                                              );
+                                            },
                                             child: const Icon(Icons.delete,
                                                 size: 20),
                                           ),
@@ -190,6 +195,65 @@ class _ReportState extends State<ReportView> {
         _postList = jsondata["posts"];
         // print(_postList);
         setState(() {});
+      }
+    });
+  }
+
+  void deletepostDialog(String pid) {
+    TextEditingController _useremailController = TextEditingController();
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(title: const Text("Delete this post?"), actions: [
+            TextButton(
+              child: const Text("Yes"),
+              onPressed: () {
+                _deletepost(pid);
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+                child: const Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                })
+          ]);
+        });
+  }
+
+  void _deletepost(String pid) {
+    ProgressDialog progressDialog = ProgressDialog(context,
+        message: const Text("Delete"), title: const Text("Posting..."));
+    progressDialog.show();
+    Fluttertoast.showToast(
+      msg: "Success",
+      toastLength: Toast.LENGTH_SHORT,
+    );
+    http.post(
+        Uri.parse(
+            "https://hubbuddies.com/269842/tnotes/php/delete_reported_post.php"),
+        body: {
+          // "email": widget.user.email,
+          "pid": pid,
+        }).then((response) {
+      progressDialog.dismiss();
+      if (response.body == "Success") {
+        Fluttertoast.showToast(
+          msg: "Success",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+        );
+
+        _loadPosts();
+        Navigator.of(context).pop();
+      } else {
+        Fluttertoast.showToast(
+          msg: "Failed",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+        );
       }
     });
   }

@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'bottomnavigationbar.dart';
+import 'changepassword.dart';
 import 'user.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -157,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: Icon(Icons.post_add_rounded),
                     text: "My Post",
                     press: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => MyPost(user: widget.user)));
@@ -167,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: Icon(Icons.edit_outlined),
                     text: "Edit Profile",
                     press: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
@@ -175,9 +176,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   ProfileMenu(
-                    icon: Icon(Icons.settings_outlined),
-                    text: "Settings",
-                    press: () {},
+                    icon: Icon(Icons.lock),
+                    text: "Change Password",
+                    press: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ChangePass(user: widget.user)));
+                    },
                   ),
                   ProfileMenu(
                     icon: Icon(
@@ -186,7 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     text: "Logout",
                     press: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => LoginScreen()));

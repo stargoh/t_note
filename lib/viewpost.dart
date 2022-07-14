@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:ndialog/ndialog.dart';
 import 'package:t_note/post.dart';
 import 'package:t_note/user.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 
 class ViewPost extends StatefulWidget {
@@ -51,6 +52,7 @@ class _ViewPostState extends State<ViewPost> {
 
   @override
   Widget build(BuildContext context) {
+    double star = double.parse(_rating.text.toString());
     isComment = false;
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
@@ -124,21 +126,32 @@ class _ViewPostState extends State<ViewPost> {
                           ),
                         ),
                       ),
-                      IgnorePointer(
-                        child: TextFormField(
-                          controller: _rating,
-                          keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true,
-                          ),
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration: const InputDecoration(
-                            labelText: "Rating",
-                          ),
+                      // IgnorePointer(
+                      //   child: TextFormField(
+                      //     controller: _rating,
+                      //     keyboardType: const TextInputType.numberWithOptions(
+                      //       decimal: true,
+                      //     ),
+                      //     inputFormatters: <TextInputFormatter>[
+                      //       FilteringTextInputFormatter.digitsOnly
+                      //     ],
+                      //     decoration: const InputDecoration(
+                      //       labelText: "Rating",
+                      //     ),
+                      //   ),
+                      // ),
+                      SizedBox(height: 10),
+                      RatingBarIndicator(
+                        rating: star,
+                        itemBuilder: (context, index) => Icon(
+                          Icons.star,
+                          color: Colors.amber,
                         ),
+                        itemCount: 5,
+                        itemSize: 35.0,
+                        direction: Axis.horizontal,
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 15),
                       Row(
                         children: [
                           widget.post.likes != "0"
